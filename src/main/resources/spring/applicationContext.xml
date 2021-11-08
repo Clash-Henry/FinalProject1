@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+    <!--    spring注解-->
+    <context:component-scan base-package="com.wtu"></context:component-scan>
+    <!--    加载数据库四要素-->
+    <context:property-placeholder location="classpath:mybatis/db/db.properties"/>
+    <!--    数据库配置-->
+    <bean id="mydata" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <!--        四要素-->
+        <property name="driverClass" value="${jdbc.driver}"/>
+        <property name="jdbcUrl" value="${jdbc.url}"/>
+        <property name="user" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+    <!--    sqlSessionFactory-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--        数据源配置-->
+        <property name="dataSource" ref="mydata"/>
+        <!--        别名-->
+        <property name="typeAliasesPackage" value="com.wtu.entity"/>
+        <!--        mapper-->
+        <property name="mapperLocations" value="classpath:mybatis/mapper/*.xml"/>
+        <!--        mybatis添加分页支持-->
+        <property name="configLocation" value="classpath:mybatis/SqlMapConfig.xml"/>
+    </bean>
+    <!--    接口扫描和session工厂-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.wtu.mapper"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+</beans>

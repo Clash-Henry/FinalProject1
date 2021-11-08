@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wtu.mapper.UserMapper">
+    
+<!--    注册（添加用户）-->
+    <insert id="insertUser" parameterType="User">
+        insert into user(username,password,birthday,sex)
+        values (#{username},#{password},#{birthday},#{sex})
+    </insert>
+<!--    登录-->
+    <select id="userLogin" parameterType="User" resultType="User">
+        select * from user where username=#{username} and password=#{password}
+    </select>
+<!--    根据uid查询user-->
+    <select id="userById" resultType="User">
+        select * from user where uid=#{id};
+    </select>
+    <!--    根据username查询uid-->
+    <select id="UidByUser" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select uid from user where username=#{username};
+    </select>
+</mapper>
